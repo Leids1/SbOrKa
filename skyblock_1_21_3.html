@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сборка Skyblock 1.21.3</title>
+    <link rel="icon" type="image/png" href="img/Icon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #00d4ff;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 40px;
+            font-size: 0.9em;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #00d4ff 0%, #00ffff 100%);
+            color: #1a1a1a;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            margin-left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section {
+            margin-bottom: 40px;
+            background-color: #242424;
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 4px solid #00d4ff;
+        }
+
+        .section h2 {
+            color: #00d4ff;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mod-item {
+            padding: 12px;
+            margin-bottom: 10px;
+            background-color: #1a1a1a;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mod-item:hover {
+            background-color: #2a2a2a;
+            border-left: 3px solid #00d4ff;
+            padding-left: 15px;
+        }
+
+        .mod-name {
+            color: #e0e0e0;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .mod-link {
+            color: #00d4ff;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+            font-size: 0.85em;
+        }
+
+        .mod-link:hover {
+            background-color: #00d4ff;
+            color: #1a1a1a;
+        }
+
+        .mod-item-content {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            align-items: center;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                max-width: 100%;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .section {
+                padding: 15px;
+            }
+
+            .mod-item-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .mod-link {
+                align-self: flex-start;
+            }
+        }
+
+        .back-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #00d4ff 0%, #00ffff 100%);
+            color: #1a1a1a;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 0.9em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            margin-right: 15px;
+        }
+
+        .back-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .header-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .download-button {
+            background: linear-gradient(135deg, #00ff88 0%, #00dd77 100%);
+            color: #1a1a1a;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .download-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+        }
+
+        .toggle-list-container {
+            margin-top: 50px;
+            padding: 20px;
+            background-color: #242424;
+            border-radius: 8px;
+            border-top: 2px solid #00d4ff;
+        }
+
+        .toggle-list-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #1a1a1a;
+            color: #00d4ff;
+            border: 2px solid #00d4ff;
+            border-radius: 5px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .toggle-list-btn:hover {
+            background-color: #2a2a2a;
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.2);
+        }
+
+        .arrow-icon {
+            transition: transform 0.3s ease;
+            font-size: 1.2em;
+        }
+
+        .toggle-list-btn.active .arrow-icon {
+            transform: rotate(180deg);
+        }
+
+        .list-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .list-content.active {
+            max-height: 600px;
+            overflow-y: auto;
+            transition: max-height 0.5s ease;
+        }
+
+        .list-inner {
+            padding: 20px 0;
+        }
+
+        .list-content.active::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .list-content.active::-webkit-scrollbar-track {
+            background: #1a1a1a;
+            border-radius: 4px;
+        }
+
+        .list-content.active::-webkit-scrollbar-thumb {
+            background: #00d4ff;
+            border-radius: 4px;
+        }
+
+        .list-content.active::-webkit-scrollbar-thumb:hover {
+            background: #00ffff;
+        }
+
+        .mod-info-icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: #00d4ff;
+            color: #1a1a1a;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 20px;
+            font-size: 0.75em;
+            font-weight: bold;
+            cursor: help;
+            margin-left: 8px;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .mod-info-icon:hover {
+            background: #00ffff;
+            transform: scale(1.1);
+        }
+
+        .info-tooltip {
+            display: none;
+            position: absolute;
+            bottom: 130%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #00d4ff;
+            color: #1a1a1a;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            white-space: nowrap;
+            z-index: 10;
+            font-weight: normal;
+        }
+
+        .info-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: #00d4ff;
+        }
+
+        .mod-info-icon:hover .info-tooltip {
+            display: block;
+        }
+
+        footer {
+            text-align: center;
+            color: #666;
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Сборка Skyblock</h1>
+        <div class="version-badge">Minecraft 1.21.3 • Fabric</div>
+        <p class="subtitle">Список рекомендуемых модов и утилит для Minecraft Skyblock (версия 1.21.3)</p>
+        
+        <div class="header-controls">
+            <a href="index.html" class="back-button">← Назад на главную</a>
+            <a href="https://drive.google.com/drive/folders/1Z-KturhTxwAXkKX9uoq2Qltuf-yNuOxZ?usp=sharing" target="_blank" class="download-button">Скачать сборку</a>
+        </div>
+
+        <div class="toggle-list-container">
+            <button class="toggle-list-btn" id="toggleBtn">
+                <span>Развернуть список модов</span>
+                <span class="arrow-icon">▼</span>
+            </button>
+            <div class="list-content" id="listContent">
+                <div class="list-inner">
+
+        <!-- Механики -->
+        <div class="section">
+            <h2>Механики</h2>
+            
+            <div class="mod-item">
+                <span class="mod-name">Sit<span class="mod-info-icon">i<span class="info-tooltip">Возможность сидеть на блоках</span></span></span>
+                <a href="https://modrinth.com/project/VKXzIykF" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Sit AFK<span class="mod-info-icon">i<span class="info-tooltip">Безопасно ждите без отключения</span></span></span>
+                <a href="https://modrinth.com/project/aFIdKOKp" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">AmbientSounds<span class="mod-info-icon">i<span class="info-tooltip">Реалистичные звуки окружения</span></span></span>
+                <a href="https://modrinth.com/project/fM515JnW" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Автокликер<span class="mod-info-icon">i<span class="info-tooltip">Автоматические клики мышью</span></span></span>
+                <a href="https://minecraft-inside.ru/mods/155248-auto-clicker-fabric.html" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Essential Mod<span class="mod-info-icon">i<span class="info-tooltip">Социальные функции и утилиты</span></span></span>
+                <a href="https://modrinth.com/project/k2ZPuTBm" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Grind Enchantments<span class="mod-info-icon">i<span class="info-tooltip">Извлечение чар на книги</span></span></span>
+                <a href="https://modrinth.com/project/WC4UgDcZ" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Inventory Profiles Next<span class="mod-info-icon">i<span class="info-tooltip">Быстрая сортировка инвентаря</span></span></span>
+                <a href="https://modrinth.com/project/O7RBXm3n" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">SkyBlock - Standard<span class="mod-info-icon">i<span class="info-tooltip">Оптимизация для Skyblock</span></span></span>
+                <a href="https://modrinth.com/project/bbtyQ1Po" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Vivecraft<span class="mod-info-icon">i<span class="info-tooltip">Поддержка VR</span></span></span>
+                <a href="https://modrinth.com/project/wGoQDPN5" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+        </div>
+
+        <!-- Визуальные и звуковые -->
+        <div class="section">
+            <h2>Визуальные и звуковые</h2>
+            
+            <div class="mod-item">
+                <span class="mod-name">Dark Loading Screen<span class="mod-info-icon">i<span class="info-tooltip">Тёмный экран загрузки</span></span></span>
+                <a href="https://modrinth.com/project/h3XWIuzM" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Ping в табе (Fabric)<span class="mod-info-icon">i<span class="info-tooltip">Пинг на вкладке</span></span></span>
+                <a href="https://modrinth.com/project/MS1ZMyR7" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Оъединение блоков<span class="mod-info-icon">i<span class="info-tooltip">Объединяет текстуры</span></span></span>
+                <a href="https://modrinth.com/project/1IjD5062" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Динамическое освещение<span class="mod-info-icon">i<span class="info-tooltip">Тени и освещение</span></span></span>
+                <a href="https://modrinth.com/project/7YjclEGc" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Классическое поедание<span class="mod-info-icon">i<span class="info-tooltip">Анимация питания</span></span></span>
+                <a href="https://modrinth.com/project/rUgZvGzi" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Falling Leaves<span class="mod-info-icon">i<span class="info-tooltip">Падающие листья</span></span></span>
+                <a href="https://modrinth.com/project/WhbRG4iK" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Visual Workbench<span class="mod-info-icon">i<span class="info-tooltip">Визуальные эффекты</span></span></span>
+                <a href="https://modrinth.com/project/kfqD1JRw" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Watut<span class="mod-info-icon">i<span class="info-tooltip">Меню для ночных</span></span></span>
+                <a href="https://modrinth.com/project/AtB5mHky" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Not Enough Animations<span class="mod-info-icon">i<span class="info-tooltip">Меню для ночных</span></span></span>
+                <a href="https://modrinth.com/project/MPCX6s5C" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+        </div>
+
+        <!-- Технические -->
+        <div class="section">
+            <h2>Технические</h2>
+            
+            <div class="mod-item">
+                <span class="mod-name">cloth config<span class="mod-info-icon">i<span class="info-tooltip">Конфигурация модов</span></span></span>
+                <a href="https://modrinth.com/project/9s6osm5g" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">CoroUtil<span class="mod-info-icon">i<span class="info-tooltip">Утилиты для модов</span></span></span>
+                <a href="https://modrinth.com/project/rLLJ1OZM" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">CreativeCore<span class="mod-info-icon">i<span class="info-tooltip">Основная библиотека</span></span></span>
+                <a href="https://modrinth.com/project/OsZiaDHq" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Fabric API<span class="mod-info-icon">i<span class="info-tooltip">Основа Fabric</span></span></span>
+                <a href="https://modrinth.com/project/P7dR8mSH" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Fabric Language Kotlin<span class="mod-info-icon">i<span class="info-tooltip">Поддержка Kotlin</span></span></span>
+                <a href="https://modrinth.com/project/Ha28R6CL" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Iris Shaders<span class="mod-info-icon">i<span class="info-tooltip">Шейдеры на OpenGL</span></span></span>
+                <a href="https://modrinth.com/project/YL57xq9U" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">ETF<span class="mod-info-icon">i<span class="info-tooltip">Модели существ</span></span></span>
+                <a href="https://modrinth.com/project/BVzZfTc1" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">EMF<span class="mod-info-icon">i<span class="info-tooltip">Текстуры существ</span></span></span>
+                <a href="https://modrinth.com/project/4A1XuqiY" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">libIPN<span class="mod-info-icon">i<span class="info-tooltip">Основная библиотека</span></span></span>
+                <a href="https://modrinth.com/project/onSQdWhM" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Mod Menu<span class="mod-info-icon">i<span class="info-tooltip">Меню модов</span></span></span>
+                <a href="https://modrinth.com/project/mOgUt4GM" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Puzzles Lib<span class="mod-info-icon">i<span class="info-tooltip">Библиотека для пазлов</span></span></span>
+                <a href="https://modrinth.com/project/QAGBst4M" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Sodium<span class="mod-info-icon">i<span class="info-tooltip">Оптимизация графики</span></span></span>
+                <a href="https://modrinth.com/project/AANobbMI" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Sodium Extra<span class="mod-info-icon">i<span class="info-tooltip">Дополнительные опции Sodium</span></span></span>
+                <a href="https://modrinth.com/project/PZn4jeSq" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Forge Config API Port<span class="mod-info-icon">i<span class="info-tooltip">Работа Forge модов на fabric</span></span></span>
+                <a href="https://modrinth.com/project/ohNO6lps" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+        </div>
+
+        <!-- Прочее -->
+        <div class="section">
+            <h2>Прочее</h2>
+            
+            <div class="mod-item">
+                <span class="mod-name">First-person Model<span class="mod-info-icon">i<span class="info-tooltip">Источник недоступен</span></span></span>
+                <a href="https://modrinth.com/project/H5XMjpHi" class="mod-link" style="color: #888; cursor: default;">Ссылка не доступна</a>
+            </div>
+        </div>
+
+        <!-- Шейдер паки -->
+        <div class="section">
+            <h2>Шейдер паки</h2>
+            
+            <div class="mod-item">
+                <span class="mod-name">Complementary Reimagined<span class="mod-info-icon">i<span class="info-tooltip">Красивые шейдеры</span></span></span>
+                <a href="https://modrinth.com/project/HVnmMxH1" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+        </div>
+
+        <!-- Ресурс паки -->
+        <div class="section">
+            <h2>Ресурс паки</h2>
+            
+            <div class="mod-item">
+                <span class="mod-name">Round Trees<span class="mod-info-icon">i<span class="info-tooltip">Круглые деревья</span></span></span>
+                <a href="https://modrinth.com/project/XlqZTP4W" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Mandala's GUI - Dark mode<span class="mod-info-icon">i<span class="info-tooltip">Тёмный GUI</span></span></span>
+                <a href="https://modrinth.com/project/h6zxsNVF" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">FreshAnimations<span class="mod-info-icon">i<span class="info-tooltip">Живые анимации</span></span></span>
+                <a href="https://modrinth.com/project/50dA9Sha" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Fresh Animations: Extensions<span class="mod-info-icon">i<span class="info-tooltip">Дополнения к анимациям</span></span></span>
+                <a href="https://modrinth.com/project/YAVTU8mK" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Fresh Moves<span class="mod-info-icon">i<span class="info-tooltip">Новые движения</span></span></span>
+                <a href="https://modrinth.com/project/slufHzC2" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Fancy Beds<span class="mod-info-icon">i<span class="info-tooltip">Красивые кровати</span></span></span>
+                <a href="https://modrinth.com/project/hFoOkEdk" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Fancy Crops<span class="mod-info-icon">i<span class="info-tooltip">Красивые культуры</span></span></span>
+                <a href="https://modrinth.com/project/UGEVQ6t9" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Default Dark Mode<span class="mod-info-icon">i<span class="info-tooltip">Тёмный ресурс пак</span></span></span>
+                <a href="https://modrinth.com/project/6SLU7tS5" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Better Lanterns<span class="mod-info-icon">i<span class="info-tooltip">Лучшие фонари</span></span></span>
+                <a href="https://modrinth.com/project/PGGrfcvL" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">3D Ladders<span class="mod-info-icon">i<span class="info-tooltip">3D лестницы</span></span></span>
+                <a href="https://modrinth.com/project/ti9eZ3CP" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+        </div>
+
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>📋 Сборка модов для Minecraft Skyblock 1.21.3 | Последнее обновление: 28 мая 2026</p>
+        </footer>
+    </div>
+    
+    <script>
+        const toggleBtn = document.getElementById('toggleBtn');
+        const listContent = document.getElementById('listContent');
+
+        toggleBtn.addEventListener('click', function() {
+            toggleBtn.classList.toggle('active');
+            listContent.classList.toggle('active');
+            
+            const text = toggleBtn.querySelector('span:first-child');
+            if (toggleBtn.classList.contains('active')) {
+                text.textContent = 'Свернуть список модов';
+            } else {
+                text.textContent = 'Развернуть список модов';
+            }
+        });
+
+        // Открыть список по умолчанию
+        toggleBtn.click();
+    </script>
+</body>
+</html>

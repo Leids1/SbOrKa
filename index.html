@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сборки Minecraft</title>
+    <link rel="icon" type="image/png" href="img/Icon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #00d4ff;
+            margin-bottom: 50px;
+            font-size: 3em;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+        }
+
+        .builds-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 20px 0;
+        }
+
+        .build-card {
+            background: linear-gradient(135deg, #242424 0%, #1a1a1a 100%);
+            border: 2px solid #00d4ff;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .build-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .build-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+            border-color: #00ffff;
+        }
+
+        .build-card:hover::before {
+            opacity: 1;
+        }
+
+        .build-card-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .build-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .build-icon-img {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            object-fit: cover;
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.2);
+        }
+
+        .build-card h2 {
+            color: #00d4ff;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            text-shadow: 0 0 5px rgba(0, 212, 255, 0.2);
+        }
+
+        .build-description {
+            color: #aaa;
+            font-size: 0.95em;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .build-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            padding: 15px 0;
+            border-top: 1px solid #333;
+            border-bottom: 1px solid #333;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            color: #00d4ff;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: #888;
+            font-size: 0.85em;
+            margin-top: 5px;
+        }
+
+        .build-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #00d4ff 0%, #00ffff 100%);
+            color: #1a1a1a;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            margin-top: 15px;
+        }
+
+        .build-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
+        }
+
+        footer {
+            text-align: center;
+            color: #666;
+            margin-top: 80px;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #242424;
+            padding: 40px;
+            border-radius: 10px;
+            border: 2px solid #00d4ff;
+            text-align: center;
+            max-width: 500px;
+            animation: slideIn 0.3s ease;
+            position: relative;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-content h2 {
+            color: #00d4ff;
+            font-size: 1.8em;
+            margin-bottom: 30px;
+            text-shadow: 0 0 5px rgba(0, 212, 255, 0.2);
+        }
+
+        .modal-content p {
+            color: #aaa;
+            margin-bottom: 30px;
+            font-size: 1em;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .modal-button {
+            background: linear-gradient(135deg, #00d4ff 0%, #00ffff 100%);
+            color: #1a1a1a;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            min-width: 150px;
+        }
+
+        .modal-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .modal-close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #00d4ff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            color: #00ffff;
+            transform: scale(1.2);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+                margin-bottom: 40px;
+            }
+
+            .builds-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .build-card {
+                padding: 20px;
+            }
+
+            .build-icon {
+                font-size: 3em;
+            }
+
+            .build-card h2 {
+                font-size: 1.5em;
+            }
+
+            .modal-content {
+                padding: 30px;
+                margin: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Сборки Minecraft</h1>
+
+        <div class="builds-grid">
+            <!-- Skyblock Сборка -->
+            <div class="build-card" onclick="openVersionModal(event)">
+                <div class="build-card-content">
+                    <img src="img/SkyBlockIcon.jpg" alt="Skyblock" class="build-icon-img">
+                    <h2>Skyblock</h2>
+                    <p class="build-description">
+                        Полная сборка модов для игры в режиме Skyblock с механиками, визуальными улучшениями и технических модов
+                    </p>
+                    <div class="build-stats">
+                        <div class="stat">
+                            <div class="stat-number">40+</div>
+                            <div class="stat-label">Модов</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">Несколько</div>
+                            <div class="stat-label">Версий</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">Fabric</div>
+                            <div class="stat-label">Ядро</div>
+                        </div>
+                    </div>
+                    <button class="build-button">Выбрать версию →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальное окно для выбора версии -->
+        <div id="versionModal" class="modal">
+            <div class="modal-content">
+                <span class="modal-close" onclick="closeVersionModal()">&times;</span>
+                <h2>Выберите версию</h2>
+                <p>Сборка доступна в двух версиях Minecraft</p>
+                <div class="modal-buttons">
+                    <a href="skyblock_1_20_1.html" class="modal-button">Minecraft 1.20.1</a>
+                    <a href="skyblock_1_21_3.html" class="modal-button">Minecraft 1.21.3</a>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>📋 Сборки модов для Minecraft | Выбирайте сборку и начинайте играть!</p>
+        </footer>
+    </div>
+
+    <script>
+        const versionModal = document.getElementById('versionModal');
+
+        function openVersionModal(event) {
+            event.stopPropagation();
+            versionModal.classList.add('active');
+        }
+
+        function closeVersionModal() {
+            versionModal.classList.remove('active');
+        }
+
+        // Закрыть модаль при клике на фон
+        versionModal.addEventListener('click', function(event) {
+            if (event.target === versionModal) {
+                closeVersionModal();
+            }
+        });
+
+        // Закрыть модаль при нажатии Escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeVersionModal();
+            }
+        });
+    </script>
+</body>
+</html>
