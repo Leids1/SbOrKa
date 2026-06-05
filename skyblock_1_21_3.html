@@ -4,324 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Сборка Skyblock 1.21.3</title>
-    <link rel="icon" type="image/png" href="img/Icon.png">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background-color: #1a1a1a;
-            color: #e0e0e0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        h1 {
-            text-align: center;
-            color: #00d4ff;
-            margin-bottom: 10px;
-            font-size: 2.5em;
-            text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #888;
-            margin-bottom: 40px;
-            font-size: 0.9em;
-        }
-
-        .version-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #00d4ff 0%, #00ffff 100%);
-            color: #1a1a1a;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: bold;
-            margin-bottom: 20px;
-            text-align: center;
-            margin-left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .section {
-            margin-bottom: 40px;
-            background-color: #242424;
-            padding: 25px;
-            border-radius: 8px;
-            border-left: 4px solid #00d4ff;
-        }
-
-        .section h2 {
-            color: #00d4ff;
-            margin-bottom: 20px;
-            font-size: 1.5em;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .mod-item {
-            padding: 12px;
-            margin-bottom: 10px;
-            background-color: #1a1a1a;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .mod-item:hover {
-            background-color: #2a2a2a;
-            border-left: 3px solid #00d4ff;
-            padding-left: 15px;
-        }
-
-        .mod-name {
-            color: #e0e0e0;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .mod-link {
-            color: #00d4ff;
-            text-decoration: none;
-            padding: 5px 10px;
-            border-radius: 3px;
-            transition: all 0.2s ease;
-            font-size: 0.85em;
-        }
-
-        .mod-link:hover {
-            background-color: #00d4ff;
-            color: #1a1a1a;
-        }
-
-        .mod-item-content {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            align-items: center;
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                max-width: 100%;
-            }
-
-            h1 {
-                font-size: 1.8em;
-            }
-
-            .section {
-                padding: 15px;
-            }
-
-            .mod-item-content {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-
-            .mod-link {
-                align-self: flex-start;
-            }
-        }
-
-        .back-button {
-            display: inline-block;
-            background: linear-gradient(135deg, #00d4ff 0%, #00ffff 100%);
-            color: #1a1a1a;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            font-size: 0.9em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            margin-right: 15px;
-        }
-
-        .back-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
-        }
-
-        .header-controls {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .download-button {
-            background: linear-gradient(135deg, #00ff88 0%, #00dd77 100%);
-            color: #1a1a1a;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 5px;
-            font-size: 1em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-
-        .download-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
-        }
-
-        .toggle-list-container {
-            margin-top: 50px;
-            padding: 20px;
-            background-color: #242424;
-            border-radius: 8px;
-            border-top: 2px solid #00d4ff;
-        }
-
-        .toggle-list-btn {
-            width: 100%;
-            padding: 15px;
-            background-color: #1a1a1a;
-            color: #00d4ff;
-            border: 2px solid #00d4ff;
-            border-radius: 5px;
-            font-size: 1.1em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .toggle-list-btn:hover {
-            background-color: #2a2a2a;
-            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.2);
-        }
-
-        .arrow-icon {
-            transition: transform 0.3s ease;
-            font-size: 1.2em;
-        }
-
-        .toggle-list-btn.active .arrow-icon {
-            transform: rotate(180deg);
-        }
-
-        .list-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .list-content.active {
-            max-height: 600px;
-            overflow-y: auto;
-            transition: max-height 0.5s ease;
-        }
-
-        .list-inner {
-            padding: 20px 0;
-        }
-
-        .list-content.active::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .list-content.active::-webkit-scrollbar-track {
-            background: #1a1a1a;
-            border-radius: 4px;
-        }
-
-        .list-content.active::-webkit-scrollbar-thumb {
-            background: #00d4ff;
-            border-radius: 4px;
-        }
-
-        .list-content.active::-webkit-scrollbar-thumb:hover {
-            background: #00ffff;
-        }
-
-        .mod-info-icon {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            background: #00d4ff;
-            color: #1a1a1a;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 20px;
-            font-size: 0.75em;
-            font-weight: bold;
-            cursor: help;
-            margin-left: 8px;
-            position: relative;
-            transition: all 0.2s ease;
-        }
-
-        .mod-info-icon:hover {
-            background: #00ffff;
-            transform: scale(1.1);
-        }
-
-        .info-tooltip {
-            display: none;
-            position: absolute;
-            bottom: 130%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #00d4ff;
-            color: #1a1a1a;
-            padding: 8px 12px;
-            border-radius: 5px;
-            font-size: 0.8em;
-            white-space: nowrap;
-            z-index: 10;
-            font-weight: normal;
-        }
-
-        .info-tooltip::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 5px solid transparent;
-            border-top-color: #00d4ff;
-        }
-
-        .mod-info-icon:hover .info-tooltip {
-            display: block;
-        }
-
-        footer {
-            text-align: center;
-            color: #666;
-            margin-top: 60px;
-            padding-top: 20px;
-            border-top: 1px solid #333;
-        }
-    </style>
+    <link rel="icon" type="image/png" href="img/BEREZA.png">
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="page-skyblock">
     <div class="container">
         <h1>🎮 Сборка Skyblock</h1>
         <div class="version-badge">Minecraft 1.21.3 • Fabric</div>
@@ -425,6 +111,11 @@
             </div>
 
             <div class="mod-item">
+                <span class="mod-name">3D Skin Layers<span class="mod-info-icon">i<span class="info-tooltip">Поддержка 3D-слоёв скина</span></span></span>
+                <a href="https://modrinth.com/project/zV5r3pPn" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
                 <span class="mod-name">Visual Workbench<span class="mod-info-icon">i<span class="info-tooltip">Визуальные эффекты</span></span></span>
                 <a href="https://modrinth.com/project/kfqD1JRw" class="mod-link" target="_blank">Открыть →</a>
             </div>
@@ -468,6 +159,46 @@
             <div class="mod-item">
                 <span class="mod-name">Fabric Language Kotlin<span class="mod-info-icon">i<span class="info-tooltip">Поддержка Kotlin</span></span></span>
                 <a href="https://modrinth.com/project/Ha28R6CL" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">SuperMartijn642's Config Lib<span class="mod-info-icon">i<span class="info-tooltip">Библиотека конфигураций для Fabric</span></span></span>
+                <a href="https://modrinth.com/project/LN9BxssP" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Architectury API<span class="mod-info-icon">i<span class="info-tooltip">Конфигурация модов</span></span></span>
+                <a href="https://modrinth.com/project/lhGA9TYQ" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">FerriteCore<span class="mod-info-icon">i<span class="info-tooltip">Оптимизация памяти и производительности</span></span></span>
+                <a href="https://modrinth.com/project/uXXizFIs" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Animal Feeding Trough<span class="mod-info-icon">i<span class="info-tooltip">Кормушки для животных</span></span></span>
+                <a href="https://modrinth.com/project/bRFWnJ87" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Capes<span class="mod-info-icon">i<span class="info-tooltip">Скрываемые накидки</span></span></span>
+                <a href="https://modrinth.com/project/89Wsn8GD" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Iceberg<span class="mod-info-icon">i<span class="info-tooltip">Добавляет айсберги и ледяные структуры</span></span></span>
+                <a href="https://modrinth.com/project/5faXoLqX" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Item Highlighter<span class="mod-info-icon">i<span class="info-tooltip">Подсветка выбранных предметов</span></span></span>
+                <a href="https://modrinth.com/project/cVNW5lr6" class="mod-link" target="_blank">Открыть →</a>
+            </div>
+
+            <div class="mod-item">
+                <span class="mod-name">Durability Tooltip<span class="mod-info-icon">i<span class="info-tooltip">Показывает прочность предметов</span></span></span>
+                <a href="https://modrinth.com/project/smUP7V3r" class="mod-link" target="_blank">Открыть →</a>
             </div>
 
             <div class="mod-item">
